@@ -1,8 +1,29 @@
+// import React, { useRef } from "react";
 import React from "react";
 import CollapseWrapper from "../common/collapse";
+import PropTypes from "prop-types";
+
+const withChildren = (Component) => (props) => {
+    const tmp = { ...props };
+    let counter = 0;
+
+    return (
+        <Component>
+            {React.Children.map(tmp?.children, (child) => {
+                return React.cloneElement(child, {
+                    ...child.props,
+                    ordernumber: counter++
+                });
+            })}
+        </Component>
+    );
+};
+
+const CollapseWrapperWithChildren = withChildren(CollapseWrapper);
+
 const ChildrenExercise = () => {
     return (
-        <CollapseWrapper title="Упражнение">
+        <CollapseWrapperWithChildren title="Упражнение">
             <p className="mt-3">
                 У вас есть компоненты Списка. Вам необходимо к каждому из них
                 добавить порядковый номер, относительно того, как они
@@ -14,12 +35,16 @@ const ChildrenExercise = () => {
             <Component />
             <Component />
             <Component />
-        </CollapseWrapper>
+        </CollapseWrapperWithChildren>
     );
 };
 
-const Component = () => {
-    return <div>Компонент списка</div>;
+const Component = ({ ordernumber }) => {
+    return <div>#{ordernumber} Компонент списка</div>;
+};
+
+Component.propTypes = {
+    ordernumber: PropTypes.number
 };
 
 export default ChildrenExercise;
