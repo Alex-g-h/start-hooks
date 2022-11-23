@@ -5,14 +5,13 @@ import PropTypes from "prop-types";
 
 const withChildren = (Component) => (props) => {
     const tmp = { ...props };
-    let counter = 0;
 
     return (
         <Component>
-            {React.Children.map(tmp?.children, (child) => {
+            {React.Children.map(tmp?.children, (child, index) => {
                 return React.cloneElement(child, {
                     ...child.props,
-                    ordernumber: counter++
+                    ordernumber: index
                 });
             })}
         </Component>
